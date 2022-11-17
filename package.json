@@ -1,0 +1,71 @@
+{
+  "name": "vue3-template",
+  "version": "1.0.0",
+  "author": "huangcheng <huangcheng@xmov.ai>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "lint": "eslint src/**/*{.js,.jsx,.ts,.tsx,.vue} --fix"
+  },
+  "env": {
+    "VITE_DEV_SERVER_HOST": "127.0.0.1",
+    "VITE_DEV_SERVER_PORT": 3344
+  },
+  "keywords": [
+    "vite",
+    "vue3",
+    "vue"
+  ],
+  "devDependencies": {
+    "@types/lodash": "^4.14.182",
+    "@types/node": "^18.11.9",
+    "@types/qs": "^6.9.7",
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.21.0",
+    "@vitejs/plugin-vue": "^2.1.0",
+    "eslint": "^8.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^8.7.1",
+    "lint-staged": "^12.4.1",
+    "prettier": "^2.6.2",
+    "rollup-plugin-visualizer": "^5.8.3",
+    "sass": "^1.51.0",
+    "stylelint": "^14.7.1",
+    "stylelint-config-recommended": "^7.0.0",
+    "stylelint-config-recommended-vue": "^1.4.0",
+    "typescript": "^4.8.3",
+    "unplugin-auto-import": "^0.7.1",
+    "unplugin-vue-components": "^0.19.3",
+    "unplugin-vue-define-options": "^0.12.7",
+    "vite": "^3.0.0",
+    "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-dynamic-import": "^0.9.1",
+    "vite-plugin-eslint": "^1.6.0",
+    "vite-plugin-resolve": "^2.0.1",
+    "vite-plugin-windicss": "^1.8.4",
+    "vue": "^3.2.31",
+    "vue-global-api": "^0.4.1",
+    "vue-tsc": "^0.34.9",
+    "windicss": "^3.5.1"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^1.1.4",
+    "@vueuse/core": "^8.5.0",
+    "axios": "^0.27.2",
+    "element-plus": "2.2.2",
+    "lodash": "^4.17.21",
+    "pinia": "^2.0.13",
+    "pinia-plugin-persistedstate": "^1.6.1",
+    "qs": "^6.10.3",
+    "vue-router": "^4.0.14"
+  },
+  "lint-staged": {
+    "*.{js,jsx,vue,ts,tsx}": [
+      "eslint --fix"
+    ],
+    "*.{css, vue}": "stylelint --fix"
+  }
+}
