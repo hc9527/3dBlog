@@ -1,7 +1,7 @@
 {
   "name": "vue3-template",
   "version": "1.0.0",
-  "author": "huangcheng <huangcheng@xmov.ai>",
+  "author": "huangcheng <1192408325@qq.com>",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -19,7 +19,6 @@
     "vue"
   ],
   "devDependencies": {
-    "@types/lodash": "^4.14.182",
     "@types/node": "^18.11.9",
     "@types/qs": "^6.9.7",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
@@ -56,7 +55,6 @@
     "@vueuse/core": "^8.5.0",
     "axios": "^0.27.2",
     "element-plus": "2.2.2",
-    "lodash": "^4.17.21",
     "pinia": "^2.0.13",
     "pinia-plugin-persistedstate": "^1.6.1",
     "qs": "^6.10.3",

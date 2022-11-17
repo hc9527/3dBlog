@@ -1,4 +1,3 @@
-import { upperFirst } from "lodash"
 import { RouteRecordRaw } from "vue-router"
 
 function getModules() {
@@ -21,7 +20,7 @@ export const vueRouters = function (): Array<RouteRecordRaw> {
 		if (!file.isRouter) return
 		routerList.push({
 			path: key.replace("/src/views", "").replace("/index.vue", "").replace(".vue", ""),
-			name: `${upperFirst(file.name)}`,
+			name: `${file.name}`,
 			component: modules[key],
 			meta: {
 				layout: file.layout || "MainLayout",

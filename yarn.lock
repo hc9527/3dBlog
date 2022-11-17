@@ -390,7 +390,7 @@
     "@vue/compiler-dom" "3.2.45"
     "@vue/shared" "3.2.45"
 
-"@vue/devtools-api@^6.4.4", "@vue/devtools-api@^6.4.5":
+"@vue/devtools-api@^6.4.5":
   version "6.4.5"
   resolved "https://npm.xmov.ai/@vue%2fdevtools-api/-/devtools-api-6.4.5.tgz#d54e844c1adbb1e677c81c665ecef1a2b4bb8380"
   integrity sha512-JD5fcdIuFxU4fQyXUu3w2KpAJHzTVdN+p4iOX2lMWSHMOoQdMAcpFLZzm9Z/2nmsoZ1a96QEhZ26e50xLBsgOQ==
@@ -2157,11 +2157,11 @@ pinia-plugin-persistedstate@^1.6.1:
   integrity sha512-vwxUca3DZKW6+wnGsgu6hA0ESVKoLovF8vH1jMOPBhaH4VpCSTgn5AsprTxXyg3uMk047m0B+NggeMTcCC8H6w==
 
 pinia@^2.0.13:
-  version "2.0.23"
-  resolved "https://npm.xmov.ai/pinia/-/pinia-2.0.23.tgz#570f5f82160b656b412602789683faa95502d227"
-  integrity sha512-N15hFf4o5STrxpNrib1IEb1GOArvPYf1zPvQVRGOO1G1d74Ak0J0lVyalX/SmrzdT4Q0nlEFjbURsmBmIGUR5Q==
+  version "2.0.24"
+  resolved "https://npm.xmov.ai/pinia/-/pinia-2.0.24.tgz#babf12207931f85b31d7451b55c0d76785b91b51"
+  integrity sha512-DDLd4Iphyc+6PYYYbx7jkb6WP9gecgu9bz9huyB5rb7CdJI3DhzYiZI+/Ih8MLewRrP9DSpslF/BgSNrJtZU7A==
   dependencies:
-    "@vue/devtools-api" "^6.4.4"
+    "@vue/devtools-api" "^6.4.5"
     vue-demi "*"
 
 postcss-media-query-parser@^0.2.3:
