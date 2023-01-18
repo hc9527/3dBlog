@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import MainLayout from "@/layouts/MainLayout.vue"
-import useGlobalIpcListener from "@/hooks/useGlobalIpcListener"
+import usePixiDrawBg from "@/hooks/usePixiDrawBg"
 
-useGlobalIpcListener()
+usePixiDrawBg()
 const route = useRoute()
 const layoutMap: { [key: string]: any } = {
 	MainLayout,
