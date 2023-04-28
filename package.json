@@ -57,6 +57,7 @@
     "element-plus": "2.2.2",
     "pinia": "^2.0.13",
     "pinia-plugin-persistedstate": "^1.6.1",
+    "pixi.js": "^7.2.4",
     "qs": "^6.10.3",
     "vue-router": "^4.0.14"
   },

@@ -1,9 +1,11 @@
-function getImageUrl(name: string) {
-	return new URL(`/src/assets/${name}`, import.meta.url).href
-}
+import * as PIXI from 'pixi.js'
+import { settings, ENV } from 'pixi.js';
+
 
 export default function usePixiDrawBg() {
-	const { PIXI, innerWidth, innerHeight } = window
+	settings.RESOLUTION = window.devicePixelRatio
+  settings.PREFER_ENV = ENV.WEBGL_LEGACY
+	const { innerWidth, innerHeight } = window
 	const app = new PIXI.Application({ background: '#272d37', width: innerWidth, height: innerHeight })
 	const canvas = app.view as HTMLCanvasElement
 
@@ -46,12 +48,23 @@ export default function usePixiDrawBg() {
 		}
 		app.stage.addChild(graphics)
 
-		// 绘制logo
-		const logo = PIXI.Sprite.from(getImageUrl('logo.svg'))
-		logo.anchor.set(0.5)
-		logo.x = app.screen.width / 2
-		logo.y = app.screen.height / 2
-		app.stage.addChild(logo)
+		// 绘制欢迎语
+		const welcomeStyle = new PIXI.TextStyle({
+			fontFamily: 'Arial',
+			fontSize: 64,
+			fontWeight: 'bold',
+			fontStyle: 'italic',
+			fill: ['#272d3700'],
+			stroke: '#ffffff',
+			strokeThickness: 2,
+			padding: 10,
+			lineJoin: 'round',
+		})
+	  const welcomeText = new PIXI.Text('H C  L J Y', welcomeStyle)
+	  welcomeText.anchor.set(0.5)
+		welcomeText.x = app.screen.width / 2
+		welcomeText.y = app.screen.height / 2
+	  app.stage.addChild(welcomeText)
 
 		// 绘制备案号文本
 		const style = new PIXI.TextStyle({
@@ -67,11 +80,11 @@ export default function usePixiDrawBg() {
 			fontWeight: 'lighter',
 			lineJoin: 'round',
 		})
-		const text = new PIXI.Text('赣ICP备19012553号-1', style)
-		text.anchor.set(0.5)
-		text.x = app.screen.width / 2
-		text.y = app.screen.height - 30
-		app.stage.addChild(text)
+		const footer = new PIXI.Text('赣ICP备19012553号-1', style)
+		footer.anchor.set(0.5)
+		footer.x = app.screen.width / 2
+		footer.y = app.screen.height - 30
+		app.stage.addChild(footer)
 
 
 		// 动画帧
