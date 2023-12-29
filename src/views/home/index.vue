@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-100vw h-100vh">
+  <div class="relative w-full h-full overflow-hidden">
     <div id="container" class="w-full h-full"></div>
     <div id="mask"></div>
     <Card1 id="text1" />
@@ -32,6 +32,11 @@
   })
 
   onMounted(() => {
+    // 移动端禁止页面被拖拽
+    document.body.addEventListener("touchmove", bodyScroll, { passive: false })
+    function bodyScroll(event: any) {
+      event.preventDefault()
+    }
     const scene = new THREE.Scene()
     const renderer = new THREE.WebGLRenderer({
         antialias: true, // 抗锯齿
@@ -86,7 +91,7 @@
       loader.load(modelPath, (gltf: any) => {
         model = gltf.scene
         model.scale.set(originScale, originScale, originScale)
-        model.position.set(1, -originY, 0)
+        model.position.set(width < 768 ? 0.2 : 1, -originY, 0)
         // 设置模型的初始map透明度
         model.traverse((child: any) => {
             if (child.isMesh) {
@@ -200,7 +205,7 @@
     let startY: number
 
     // 添加触摸开始事件监听器
-    window.addEventListener('touchstart', (event) => {
+    window.addEventListener('touchstart', (event: any) => {
         // 获取触摸的第一个触点（通常是单指触摸）
         const touch = event.touches[0]
         // 记录触摸开始时的垂直坐标

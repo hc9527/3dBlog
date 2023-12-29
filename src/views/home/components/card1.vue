@@ -13,6 +13,6 @@
 </template>
 <style lang="scss">
 .card1 {
-  left: 10%;
+  left: 5%;
 }
 </style>

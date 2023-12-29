@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed bottom-10px left-0 z-10 w-full flex items-center justify-center text-14px text-[#888] break-words"
+    class="absolute bottom-10px left-0 z-10 w-full flex items-center justify-center text-14px text-[#888] break-words"
   >
     <img class="h-16px mr-6px" src="@/assets/beian.png" alt="" />
     <a

@@ -25,7 +25,7 @@
   transform: translateY(-50%);
   /* background: #aaa; */
   pointer-events: none;
-  color: #eee;
+  color: #fff;
   font-size: 30px;
   line-height: 60px;
   font-weight: bold;
@@ -33,6 +33,7 @@
     font-size: 18px;
     line-height: 30px;
     font-weight: 400;
+    color: rgba($color: #fff, $alpha: 0.6);
   }
 }
 
