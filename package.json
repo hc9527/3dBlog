@@ -1,11 +1,11 @@
 {
   "name": "hcljy",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "huangcheng <1192408325@qq.com>",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vue-tsc --noEmit && vite build",
     "lint": "eslint src/**/*{.js,.jsx,.ts,.tsx,.vue} --fix"
   },
@@ -52,13 +52,16 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
+    "@tweenjs/tween.js": "^21.0.0",
     "@vueuse/core": "^8.5.0",
     "axios": "^0.27.2",
     "element-plus": "2.2.2",
+    "gsap": "^3.12.4",
     "pinia": "^2.0.13",
     "pinia-plugin-persistedstate": "^1.6.1",
     "pixi.js": "^7.2.4",
     "qs": "^6.10.3",
+    "three": "^0.160.0",
     "vue-router": "^4.0.14"
   },
   "lint-staged": {

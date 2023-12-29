@@ -1,16 +1,50 @@
-@import 'element-plus/theme-chalk/src/dark/css-vars.scss';
+@import "element-plus/theme-chalk/src/dark/css-vars.scss";
 
 ::-webkit-scrollbar {
-	width: 6px; /* 纵向滚动条 宽度 */
-	height: 6px; /* 横向滚动条 高度 */
+  width: 6px; /* 纵向滚动条 宽度 */
+  height: 6px; /* 横向滚动条 高度 */
 }
 ::-webkit-scrollbar-thumb {
-	@apply bg-black dark:bg-white;
-	opacity: 0.2;
-	border-radius: 10px;
-	transition: all .2s ease-in-out;
+  @apply bg-black dark:bg-white;
+  opacity: 0.2;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
 }
 // 边角，两个滚动条交汇处
 ::-webkit-scrollbar-corner {
-	@apply bg-white dark:bg-black;
+  @apply bg-white dark:bg-black;
+}
+
+.card {
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  width: 50%;
+  max-width: 600px;
+  height: auto;
+  transform: translateY(-50%);
+  /* background: #aaa; */
+  pointer-events: none;
+  color: #eee;
+  font-size: 30px;
+  line-height: 60px;
+  font-weight: bold;
+  .text {
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 400;
+  }
+}
+
+@media screen and (max-device-width: 768px) {
+  .card {
+    font-size: 24px;
+    .text {
+      font-size: 14px !important;
+      line-height: 20px !important;
+    }
+  }
+  a {
+    font-size: 12px !important;
+  }
 }

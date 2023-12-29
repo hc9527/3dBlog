@@ -5,10 +5,13 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BeiAn: typeof import('./src/components/bei-an.vue')['default']
     BizHello: typeof import('./src/biz-components/biz-hello.vue')['default']
     Hello: typeof import('./src/components/hello.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ScrollDown: typeof import('./src/components/scroll-down.vue')['default']
+    WelcomeSvg: typeof import('./src/components/welcome-svg.vue')['default']
   }
 }
 

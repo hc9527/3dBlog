@@ -14,6 +14,7 @@ const pkg = require("./package.json")
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  assetsInclude: ['**/*.glb'],
   define: {
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
   },
