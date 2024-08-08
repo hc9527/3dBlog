@@ -259,6 +259,7 @@ export default function useThreeJs() {
 
     // 添加触摸开始事件监听器
     window.addEventListener('touchstart', (event: any) => {
+			// 这里会导致移动端click失效
 			event.preventDefault()
 			// 获取触摸的第一个触点（通常是单指触摸）
 			const touch = event.touches[0]
@@ -274,7 +275,7 @@ export default function useThreeJs() {
 			// 计算垂直滑动距离
 			const deltaY = touch.clientY - startY
 			// 在控制台中打印滑动距离
-			console.log(`垂直滑动距离: ${deltaY}px`)
+			// console.log(`垂直滑动距离: ${deltaY}px`)
 			// 在这里您可以执行滑动相关的操作
 			scrollChange(-deltaY / 10)
     })
@@ -294,25 +295,55 @@ export default function useThreeJs() {
     })
 	}
 
+	const setDeviceOrientationListening = () => {
+		window.addEventListener('deviceorientation', (event) => {
+			// 获取设备的方向数据
+			const beta = event.beta || 0 // 表示设备围绕 x 轴的旋转，即为前后倾斜的角度
+			const gamma = event.gamma || 0 // 表示设备围绕 y 轴的旋转，即为左右倾斜的角度
+
+			// 将角度转换为范围在 -1 到 1 之间的数值，这个范围与鼠标移动的计算方法相同
+			mouseX = gamma / 90 // gamma值范围是-90到90
+			mouseY = beta / 180 // beta值范围是-180到180
+		})
+	}
+
+	// 监听移动端陀螺仪
+	let isFirst = true
+	const watchDeviceOrientation = () => {
+		if (!isFirst) {
+			return
+		}
+		isFirst = false
+		console.log('DeviceOrientationEvent', window.DeviceOrientationEvent)
+		const DeviceOrientationEvent: any = window.DeviceOrientationEvent
+		if (!DeviceOrientationEvent) {
+			console.error('不支持陀螺仪')
+			return
+		}
+		if (DeviceOrientationEvent?.requestPermission) {
+      DeviceOrientationEvent.requestPermission()
+        .then((permissionState: string) => {
+          // 如果用户同意，就可以监听陀螺仪数据
+          if (permissionState === "granted") {
+            setDeviceOrientationListening()
+          } else {
+            console.error("用户不同意访问陀螺仪")
+          }
+        })
+        .catch((error: Error) => {
+          console.error(error)
+        })
+    } else {
+      setDeviceOrientationListening()
+    }
+	}
+
 	// 监听鼠标滚轮事件更新
 	const watchMouseWheel = () => {
 		window.addEventListener('wheel', function(event) {
       scrollChange(event.deltaY)
     })
 	}
-
-	onMounted(() => {
-    // document.onkeydown = function (e) {
-    //   if (e && e.keyCode === 32) {
-    //     if (currentActionIndex === 4) {
-    //       currentActionIndex = -1
-    //     }
-    //     currentActionIndex += 1
-    //     gui['action'](currentActionIndex)
-    //   }
-    // }
-
-	})
 
 	return {
 		render,
@@ -325,6 +356,7 @@ export default function useThreeJs() {
 		watchTouchToScroll,
 		watchMouseMove,
 		watchMouseWheel,
+		watchDeviceOrientation,
 		updateCameraByScroll
 	}
 }

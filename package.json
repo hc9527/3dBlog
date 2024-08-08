@@ -43,6 +43,7 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-dynamic-import": "^0.9.1",
     "vite-plugin-eslint": "^1.6.0",
+    "vite-plugin-mkcert": "^1.17.5",
     "vite-plugin-resolve": "^2.0.1",
     "vite-plugin-windicss": "^1.8.4",
     "vue": "^3.2.31",

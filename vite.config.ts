@@ -9,6 +9,7 @@ import eslintPlugin from "vite-plugin-eslint"
 import DefineOptions from 'unplugin-vue-define-options/vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 import viteCompression from 'vite-plugin-compression'
+import mkcert from "vite-plugin-mkcert"
 const path = require("path")
 const pkg = require("./package.json")
 
@@ -20,6 +21,7 @@ export default defineConfig({
   },
   base: './',
   plugins: [
+    mkcert(),
     vue(),
     dynamicImport(),
     DefineOptions(),
@@ -56,6 +58,7 @@ export default defineConfig({
     viteCompression()
   ],
   server: {
+    https: true,
     host: pkg.env.VITE_DEV_SERVER_HOST,
     port: pkg.env.VITE_DEV_SERVER_PORT,
   },

@@ -37,7 +37,7 @@
 		watchTouchToScroll,
 		watchMouseMove,
 		watchMouseWheel,
-		updateCameraByScroll
+		updateCameraByScroll,
   } = useThreeJs()
 
   onMounted(() => {
