@@ -1,13 +1,18 @@
 <template>
-  <div class="relative w-full h-full overflow-hidden">
-    <div id="container" class="w-full h-full"></div>
-    <div id="mask"></div>
-    <Card1 id="text1" />
-    <Card2 id="text2" />
-    <Card3 id="text3" />
-    <WelcomeSvg id="svg" />
-    <ScrollDown />
-    <BeiAn />
+  <div class="relative w-full h-full overflow-hidden bg-[#060e1b]">
+    <Bg class="absolute top-0 left-0 z-0 w-full h-full" />
+    <div id="container" class="w-full h-full relative z-1"></div>
+    <div class="absolute top-0 left-0 z-1 w-full h-full">
+      <div id="mask"></div>
+      <Card1 id="text1" />
+      <Card2 id="text2" />
+      <Card3 id="text3" />
+      <WelcomeSvg id="svg" />
+      <ScrollDown />
+      <Transition name="fade-up">
+        <BeiAn v-if="isBottom" />
+      </Transition>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -17,6 +22,7 @@
   import BeiAn from '@/components/bei-an.vue'
   import ScrollDown from '@/components/scroll-down.vue'
   import WelcomeSvg from '@/components/welcome-svg.vue'
+  import Bg from '@/components/bg.vue'
   // @ts-ignore
   import gaodaGlb from '@/assets/models/gaoda.glb'
   import useThreeJs from '@/hooks/useThreeJs'
@@ -32,12 +38,12 @@
 		initCanvas,
 		initDracoLoader,
 		initCamera,
-		initParticles,
 		initLight,
 		watchTouchToScroll,
 		watchMouseMove,
 		watchMouseWheel,
 		updateCameraByScroll,
+    isBottom
   } = useThreeJs()
 
   onMounted(() => {
@@ -45,7 +51,6 @@
     initDracoLoader()
 		initLight()
 		initCamera()
-		initParticles()
     loadModel({
       path: gaodaGlb,
       scale: 4,
@@ -65,7 +70,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, transparent 40%, black 100%);
+  background: radial-gradient(circle at center, transparent 40%, #000 100%);
   pointer-events: none;
 }
 #svg {
@@ -76,5 +81,16 @@
   height: 100vh;
   opacity: 1;
   transition: opacity 1s;
+}
+
+.fade-up-enter-active,
+.fade-up-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.fade-up-enter-from,
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
 }
 </style>

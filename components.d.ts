@@ -6,6 +6,8 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     BeiAn: typeof import('./src/components/bei-an.vue')['default']
+    'BeiAn copy': typeof import('./src/components/bei-an copy.vue')['default']
+    Bg: typeof import('./src/components/bg.vue')['default']
     BizHello: typeof import('./src/biz-components/biz-hello.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     RouterLink: typeof import('vue-router')['RouterLink']

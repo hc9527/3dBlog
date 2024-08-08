@@ -1,3 +1,12 @@
+export function getOpacityCenter(yValue: number, lowerRange: number, upperRange: number) {
+  let opacity = 0
+  if (yValue >= lowerRange && yValue <= upperRange) {
+    const center = (lowerRange + upperRange) / 2
+    opacity = Math.abs(Math.abs((yValue - center) / (upperRange - center)) - 1)
+  }
+  return opacity
+}
+
 export function getOpacity(yValue: number, lowerRange: number, upperRange: number) {
   let opacity = 0
   if (yValue >= lowerRange && yValue <= upperRange) {

@@ -1,6 +1,6 @@
 <template>
   <div class="card card2">
-    <h1>L J Y H C</h1>
+    <h1>L J Y&ensp;H C</h1>
     <div class="text">
       “彦祖！着火了！快来帮忙！”我听到女朋友大喊。现在一个难题在我面前——是恢复一个重要的
       Amazon 服务，还是救公寓的火。

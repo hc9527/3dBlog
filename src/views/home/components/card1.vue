@@ -1,6 +1,6 @@
 <template>
   <div class="card card1">
-    <h1>H C L J Y</h1>
+    <h1>H C&ensp;L J Y</h1>
     <div class="text">
       我在 Amazon 当软件工程师的时候，故事是这样的：
       <br />

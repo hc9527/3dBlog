@@ -3,21 +3,24 @@ import * as TWEEN from '@tweenjs/tween.js'
 import gsap from "gsap"
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
-import { getOpacity, getOpacityReverse } from '@/utils/index'
+import { getOpacity, getOpacityCenter, getOpacityReverse } from '@/utils/index'
+import { useWindowListener } from './useWindowListener'
 
 export default function useThreeJs() {
 	const width = window.innerWidth
   const height = window.innerHeight
 	const scene = new THREE.Scene()
 	const renderer = new THREE.WebGLRenderer({
-			antialias: true, // 抗锯齿
+		antialias: true, // 抗锯齿
+		alpha: true
 	})
 	const loader = new GLTFLoader()
 	const clock = new THREE.Clock()
-	let model: any, particles: any, camera: any, directionalLight: any
 	const timeline1 = 6 // 时间线1
 	const timeline2 = 3.5 // 时间线2
+	const isBottom = ref(false)
 
+	let model: any, camera: any, directionalLight: any
 	let originY = 0 // 模型垂直方向初始偏移量
 	let originScale = 0 // 模型初始缩放大小
 	let yValue = 0 // 模型y轴偏移量
@@ -34,8 +37,6 @@ export default function useThreeJs() {
 	const initCanvas = (id: string) => {
 		renderer.setSize(width, height)
     renderer.setPixelRatio(window.devicePixelRatio)
-    renderer.setClearColor('#000')
-    scene.background = new THREE.Color('#1b1e1e')
     document.getElementById(id)?.appendChild(renderer.domElement)
 	}
 
@@ -73,8 +74,8 @@ export default function useThreeJs() {
 		const { path, scale, translateY, callback } = config
 		loader.load(path, (gltf: any) => {
 			model = gltf.scene
-			originScale = width < 768 ? scale * 0.9 : scale
-			originY = translateY
+			originScale = width < 768 ? scale * 0.83 : scale
+			originY = width < 768 ? translateY * 0.94 : translateY
 			model.scale.set(originScale, originScale, originScale)
 			model.position.set(width < 768 ? 0.2 : 1, originY, 0)
 
@@ -131,32 +132,6 @@ export default function useThreeJs() {
 	}
 
 	// 创建星光粒子
-	const initParticles = (count = 1000) => {
-		let particleMaterial = new THREE.PointsMaterial({
-				color: 0xFFFFFF,
-				size: 0.9, // 点的大小
-				transparent: true,
-				opacity: 1,
-				depthTest: false
-		})
-		// 创建粒子几何体
-		let particleGeometry = new THREE.BufferGeometry()
-		// 生成随机的粒子位置
-		let positions = new Float32Array(count * 3)
-		for (let i = 0; i < positions.length; i += 3) {
-				let x = (Math.random() - 0.5) * 10
-				let y = (Math.random() - 0.5) * 10
-				let z = (Math.random() - 0.5) * 10 - 2
-				positions[i] = x
-				positions[i + 1] = y
-				positions[i + 2] = z
-		}
-		// 将位置数据设置给几何体
-		particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-		// 创建粒子系统
-		particles = new THREE.Points(particleGeometry, particleMaterial)
-		scene.add(particles)
-	}
 
 	// 创建灯光
 	const initLight = () => {
@@ -188,10 +163,12 @@ export default function useThreeJs() {
 			if (currentActionIndex !== idleActionIndex) {
 				currentActionIndex = idleActionIndex
 				gui['action'](currentActionIndex)
+				isBottom.value = false
 			}
 		} else if (currentActionIndex === idleActionIndex) {
 			currentActionIndex = idleActionIndex + 1
 			playNextAnimation(currentActionIndex)
+			isBottom.value = true
 		}
 		// 根据 y 值展示不同的文本
 		if (yValue === 0) {
@@ -199,7 +176,7 @@ export default function useThreeJs() {
 		}
 		gsap.to('.container2', { duration: gsapDuration, opacity: getOpacityReverse(yValue, 0, 0.3) })
 		gsap.to('#text1', { duration: gsapDuration, opacity: getOpacityReverse(yValue, 0, 3) })
-		gsap.to('#text2', { duration: gsapDuration, opacity: getOpacity(yValue, 4, 6) })
+		gsap.to('#text2', { duration: gsapDuration, opacity: getOpacityCenter(yValue, 3.5, 7.5) })
 		gsap.to('#text3', { duration: gsapDuration, opacity: getOpacity(yValue, timeline1 + timeline2 - 1.5, timeline1 + timeline2) })
 	}
 	const scrollChange = (deltaY: number) => {
@@ -215,6 +192,65 @@ export default function useThreeJs() {
 		}
 		updateCameraByScroll(yValue, rValue)
 	}
+
+	// 兼容移动端滚动
+	const watchTouchToScroll = () => {
+		// 定义变量来跟踪触摸开始时的坐标
+		let startY: number
+
+		// 添加触摸开始事件监听器
+		useWindowListener('touchstart', (event: any) => {
+			// 这里会导致移动端click失效
+			event.preventDefault()
+			// 获取触摸的第一个触点（通常是单指触摸）
+			const touch = event.touches[0]
+			// 记录触摸开始时的垂直坐标
+			startY = touch.clientY
+			gsapDuration = 0
+		}, { passive: false })
+
+		// 添加触摸移动事件监听器
+		useWindowListener('touchmove', (event) => {
+			// 获取触摸的第一个触点
+			const touch = event.touches[0]
+			// 计算垂直滑动距离
+			const deltaY = touch.clientY - startY
+			// 在控制台中打印滑动距离
+			// console.log(`垂直滑动距离: ${deltaY}px`)
+			// 在这里您可以执行滑动相关的操作
+			scrollChange(-deltaY / 10)
+		})
+
+		// 添加触摸结束事件监听器
+		useWindowListener('touchend', () => {
+			// 清除起始坐标
+			startY = 0
+		})
+	}
+
+	// 监听鼠标移动，镜头晃动
+	const watchMouseMove = () => {
+		useWindowListener('mousemove', function(event) {
+			mouseX = (event.clientX / window.innerWidth) * 2 - 1
+			mouseY = - (event.clientY / window.innerHeight) * 2 + 1
+		})
+	}
+
+
+	// 监听鼠标滚轮事件更新
+	const watchMouseWheel = () => {
+		useWindowListener('wheel', function(event) {
+			scrollChange(event.deltaY)
+		})
+	}
+
+	useWindowListener('resize', () => {
+		const width = window.innerWidth
+    const height = window.innerHeight
+    camera.aspect = width / height
+    camera.updateProjectionMatrix()
+    renderer.setSize(width, height)
+	})
 
 	// 渲染画布
 	const render = () => {
@@ -241,108 +277,10 @@ export default function useThreeJs() {
 			mixer.update(time)
 		}
 
-		// 使粒子闪烁
-		if (particles) {
-			particles.rotation.x += 0.001
-			particles.rotation.y += 0.001
-		}
 		renderer.render(scene, camera)
 		TWEEN.update()
 		// controls.update();
 		// renderer.render( scene, camera2 );
-	}
-
-	// 兼容移动端滚动
-	const watchTouchToScroll = () => {
-		// 定义变量来跟踪触摸开始时的坐标
-    let startY: number
-
-    // 添加触摸开始事件监听器
-    window.addEventListener('touchstart', (event: any) => {
-			// 这里会导致移动端click失效
-			event.preventDefault()
-			// 获取触摸的第一个触点（通常是单指触摸）
-			const touch = event.touches[0]
-			// 记录触摸开始时的垂直坐标
-			startY = touch.clientY
-			gsapDuration = 0
-    }, { passive: false })
-
-    // 添加触摸移动事件监听器
-    window.addEventListener('touchmove', (event) => {
-			// 获取触摸的第一个触点
-			const touch = event.touches[0]
-			// 计算垂直滑动距离
-			const deltaY = touch.clientY - startY
-			// 在控制台中打印滑动距离
-			// console.log(`垂直滑动距离: ${deltaY}px`)
-			// 在这里您可以执行滑动相关的操作
-			scrollChange(-deltaY / 10)
-    })
-
-    // 添加触摸结束事件监听器
-    window.addEventListener('touchend', () => {
-			// 清除起始坐标
-			startY = 0
-    })
-	}
-
-	// 监听鼠标移动，镜头晃动
-	const watchMouseMove = () => {
-		document.addEventListener('mousemove', function(event) {
-      mouseX = (event.clientX / window.innerWidth) * 2 - 1
-      mouseY = - (event.clientY / window.innerHeight) * 2 + 1
-    })
-	}
-
-	const setDeviceOrientationListening = () => {
-		window.addEventListener('deviceorientation', (event) => {
-			// 获取设备的方向数据
-			const beta = event.beta || 0 // 表示设备围绕 x 轴的旋转，即为前后倾斜的角度
-			const gamma = event.gamma || 0 // 表示设备围绕 y 轴的旋转，即为左右倾斜的角度
-
-			// 将角度转换为范围在 -1 到 1 之间的数值，这个范围与鼠标移动的计算方法相同
-			mouseX = gamma / 90 // gamma值范围是-90到90
-			mouseY = beta / 180 // beta值范围是-180到180
-		})
-	}
-
-	// 监听移动端陀螺仪
-	let isFirst = true
-	const watchDeviceOrientation = () => {
-		if (!isFirst) {
-			return
-		}
-		isFirst = false
-		console.log('DeviceOrientationEvent', window.DeviceOrientationEvent)
-		const DeviceOrientationEvent: any = window.DeviceOrientationEvent
-		if (!DeviceOrientationEvent) {
-			console.error('不支持陀螺仪')
-			return
-		}
-		if (DeviceOrientationEvent?.requestPermission) {
-      DeviceOrientationEvent.requestPermission()
-        .then((permissionState: string) => {
-          // 如果用户同意，就可以监听陀螺仪数据
-          if (permissionState === "granted") {
-            setDeviceOrientationListening()
-          } else {
-            console.error("用户不同意访问陀螺仪")
-          }
-        })
-        .catch((error: Error) => {
-          console.error(error)
-        })
-    } else {
-      setDeviceOrientationListening()
-    }
-	}
-
-	// 监听鼠标滚轮事件更新
-	const watchMouseWheel = () => {
-		window.addEventListener('wheel', function(event) {
-      scrollChange(event.deltaY)
-    })
 	}
 
 	return {
@@ -351,12 +289,11 @@ export default function useThreeJs() {
 		initCanvas,
 		initDracoLoader,
 		initCamera,
-		initParticles,
 		initLight,
 		watchTouchToScroll,
 		watchMouseMove,
 		watchMouseWheel,
-		watchDeviceOrientation,
-		updateCameraByScroll
+		updateCameraByScroll,
+		isBottom
 	}
 }
