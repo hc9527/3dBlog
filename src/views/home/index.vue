@@ -7,8 +7,14 @@
       <Card1 id="text1" />
       <Card2 id="text2" />
       <Card3 id="text3" />
-      <WelcomeSvg id="svg" />
       <ScrollDown />
+      <ScrollLine v-if="!loading" :progress="scrollProgress" />
+      <Transition name="fade">
+        <div v-show="loading">
+          <WelcomeSvg />
+          <FakeLoading :loading="loading" />
+        </div>
+      </Transition>
       <Transition name="fade-up">
         <BeiAn v-if="isBottom" />
       </Transition>
@@ -22,6 +28,8 @@
   import BeiAn from '@/components/bei-an.vue'
   import ScrollDown from '@/components/scroll-down.vue'
   import WelcomeSvg from '@/components/welcome-svg.vue'
+  import FakeLoading from '@/components/fake-loading.vue'
+  import ScrollLine from '@/components/scroll-line.vue'
   import Bg from '@/components/bg.vue'
   // @ts-ignore
   import gaodaGlb from '@/assets/models/gaoda.glb'
@@ -43,7 +51,9 @@
 		watchMouseMove,
 		watchMouseWheel,
 		updateCameraByScroll,
-    isBottom
+    isBottom,
+    loading,
+    scrollProgress
   } = useThreeJs()
 
   onMounted(() => {
@@ -73,14 +83,15 @@
   background: radial-gradient(circle at center, transparent 40%, #000 100%);
   pointer-events: none;
 }
-#svg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  opacity: 1;
-  transition: opacity 1s;
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 .fade-up-enter-active,

@@ -1,5 +1,6 @@
 <template>
   <svg
+    id="svg"
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     version="1.1"
@@ -34,8 +35,28 @@
   0% {
     stroke-dashoffset: 3000;
   }
-  90% {
+  30% {
+    stroke-dashoffset: 2000;
+  }
+  50% {
+    stroke-dashoffset: 1980;
+  }
+  100% {
     stroke-dashoffset: 0;
+  }
+}
+
+#svg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  height: 80vh;
+  transform: translate(-50%, -50%);
+}
+/* 当页面宽度小于750px*/
+@media screen and (max-width: 750px) {
+  #svg {
+    height: 40vh;
   }
 }
 </style>

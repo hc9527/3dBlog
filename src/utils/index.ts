@@ -24,3 +24,11 @@ export function getOpacityReverse(yValue: number, lowerRange: number, upperRange
   }
   return opacity
 }
+
+export function getRandomIntExcludingY(x: number, y: number) {
+  let randomNum = Math.floor(Math.random() * (x + 1)) // 生成0到x范围内的随机整数
+  while (randomNum === y) {
+    randomNum = Math.floor(Math.random() * (x + 1)) // 如果生成的随机数等于y，则重新生成
+  }
+  return randomNum
+}

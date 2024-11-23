@@ -3,7 +3,7 @@ import * as TWEEN from '@tweenjs/tween.js'
 import gsap from "gsap"
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
-import { getOpacity, getOpacityCenter, getOpacityReverse } from '@/utils/index'
+import { getOpacity, getOpacityCenter, getOpacityReverse, getRandomIntExcludingY } from '@/utils/index'
 import { useWindowListener } from './useWindowListener'
 
 export default function useThreeJs() {
@@ -18,20 +18,25 @@ export default function useThreeJs() {
 	const clock = new THREE.Clock()
 	const timeline1 = 6 // 时间线1
 	const timeline2 = 3.5 // 时间线2
+	const rTimeline = 6.6 // 旋转时间线
 	const isBottom = ref(false)
+	const loading = ref(true)
+	const scroll = ref(0)
+	const scrollProgress = computed(() => {
+		return Math.floor(100 * scroll.value / rTimeline)
+	})
 
 	let model: any, camera: any, directionalLight: any
 	let originY = 0 // 模型垂直方向初始偏移量
 	let originScale = 0 // 模型初始缩放大小
 	let yValue = 0 // 模型y轴偏移量
 	let rValue = 0 // 模型转动偏移量
-	let loading = true // 是否在加载模型
 	let gsapDuration = 0.3 // gsap动画过渡时长
 	let actions: any[] = [] // 所有的动画数组
 	let gui: any = {} // 动画控制
 	let mixer: any = null // AnimationMixer 对象
 	let currentActionIndex = 0 // 当前动画下标
-	let idleActionIndex = 0 // 当前动画下标
+	let idleActionIndex = 0 // idle动画下标
 	let mouseX = 0, mouseY = 0 // 鼠标移动便宜
 
 	const initCanvas = (id: string) => {
@@ -103,7 +108,9 @@ export default function useThreeJs() {
 				gui['action'](idleActionIndex)
 			}
 			scene.add(model)
-			loading = false
+			setTimeout(() => {
+				loading.value = false
+			}, 100)
 			if (callback) {
 				callback()
 			}
@@ -159,37 +166,35 @@ export default function useThreeJs() {
 		} else {
 			gsap.to(model.scale, { duration: gsapDuration, x: originScale, y: originScale, z: originScale, ease: "power1.inOut" })
 		}
-		if (rValue !== 6.6) {
+		if (rValue !== rTimeline) {
 			if (currentActionIndex !== idleActionIndex) {
 				currentActionIndex = idleActionIndex
 				gui['action'](currentActionIndex)
 				isBottom.value = false
 			}
 		} else if (currentActionIndex === idleActionIndex) {
-			currentActionIndex = idleActionIndex + 1
+			currentActionIndex = getRandomIntExcludingY(actions.length - 1, idleActionIndex)
 			playNextAnimation(currentActionIndex)
 			isBottom.value = true
 		}
 		// 根据 y 值展示不同的文本
-		if (yValue === 0) {
-			gsap.to('#svg', { duration: 0.3, opacity: 0 })
-		}
 		gsap.to('.container2', { duration: gsapDuration, opacity: getOpacityReverse(yValue, 0, 0.3) })
 		gsap.to('#text1', { duration: gsapDuration, opacity: getOpacityReverse(yValue, 0, 3) })
 		gsap.to('#text2', { duration: gsapDuration, opacity: getOpacityCenter(yValue, 3.5, 7.5) })
 		gsap.to('#text3', { duration: gsapDuration, opacity: getOpacity(yValue, timeline1 + timeline2 - 1.5, timeline1 + timeline2) })
 	}
 	const scrollChange = (deltaY: number) => {
-		if (loading) {
+		if (loading.value) {
 			return
 		}
 		yValue += deltaY * 0.003
 		yValue = Math.min(timeline1 + timeline2, Math.max(0, yValue))
-		if (yValue !== 0 && yValue !== (timeline1 + timeline2) && rValue <= 6.6) {
+		if (yValue !== 0 && yValue !== (timeline1 + timeline2) && rValue <= rTimeline) {
 			rValue += deltaY * 0.002
 		} else {
-			rValue = yValue === 0 ? 0 : 6.6
+			rValue = yValue === 0 ? 0 : rTimeline
 		}
+		scroll.value = rValue
 		updateCameraByScroll(yValue, rValue)
 	}
 
@@ -294,6 +299,8 @@ export default function useThreeJs() {
 		watchMouseMove,
 		watchMouseWheel,
 		updateCameraByScroll,
-		isBottom
+		isBottom,
+		loading,
+		scrollProgress
 	}
 }
