@@ -25,7 +25,6 @@
 		},
 		"types": [
 			"unplugin-vue-define-options",
-			"element-plus/global",
 			"vite/client",
 		]
 	},

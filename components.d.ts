@@ -9,7 +9,6 @@ declare module '@vue/runtime-core' {
     Bg: typeof import('./src/components/bg.vue')['default']
     BizHello: typeof import('./src/biz-components/biz-hello.vue')['default']
     FakeLoading: typeof import('./src/components/fake-loading.vue')['default']
-    'FakeLoading copy': typeof import('./src/components/fake-loading copy.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollDown: typeof import('./src/components/scroll-down.vue')['default']

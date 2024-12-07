@@ -3,18 +3,13 @@ import setConfig from '@/plugins/axios/axios.setConfig'
 import handleResponse from "@/plugins/axios/axios.handleResponse"
 import handleError from "@/plugins/axios/axios.handleError"
 import qs from 'qs'
-import { ElMessage } from "element-plus"
 import { useAppStore } from "@/store/app"
 
 const getAxiosConfigKey = (config: any): string => {
 	return `${config?.url}_${config?.method}_${JSON.stringify(config?.data || config?.params)}`
 }
 const showTip = (tip: string) => {
-	ElMessage({
-		type: "warning",
-		message: tip || "请求出错啦",
-		duration: 1500,
-	})
+	console.log(tip)
 }
 /**
  * intactRequest是只在axios基础上更改了请求配置。

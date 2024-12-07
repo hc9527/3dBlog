@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from "unplugin-auto-import/vite"
 import Components from "unplugin-vue-components/vite"
-import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import WindiCSS from "vite-plugin-windicss"
 import dynamicImport from "vite-plugin-dynamic-import"
 import eslintPlugin from "vite-plugin-eslint"
@@ -44,11 +43,9 @@ export default defineConfig({
         globalsPropValue: true, // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
       },
       imports: ["vue", "vue-router"],
-      resolvers: [ElementPlusResolver()],
     }),
     Components({
       dirs: ['src/components', 'src/biz-components'],
-      resolvers: [ElementPlusResolver()],
     }),
     visualizer({
       open: false,
